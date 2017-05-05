@@ -5,7 +5,7 @@ project ( cpack-mulle-clang VERSION 4.0.0.0)
 #
 # just some libraries
 #
-install( DIRECTORY "opt/mulle-clang/${PROJECT_VERSION}" DESTINATION "/opt/mulle-clang"   USE_SOURCE_PERMISSIONS)
+install( DIRECTORY "opt/mulle-clang/${PROJECT_VERSION}" DESTINATION "/opt/mulle-clang" USE_SOURCE_PERMISSIONS)
 
 #
 # create a symlink for binary
@@ -38,5 +38,4 @@ set( CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_DEBIAN_PACKAGE_DESCRIPTION}")
 #
 # must be after CPACK_PACKAGE_VERSION
 include( CPack)
-
 
