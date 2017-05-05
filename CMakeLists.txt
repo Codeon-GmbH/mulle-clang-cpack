@@ -1,11 +1,11 @@
 cmake_minimum_required (VERSION 3.0)
 
-project ( cpack-mulle-clang VERSION 3.9.0)
+project ( cpack-mulle-clang VERSION 4.0.0.0)
 
 #
 # just some libraries
 #
-install( DIRECTORY "opt/mulle-clang/${VERSION}" DESTINATION "/opt/mulle-clang"   USE_SOURCE_PERMISSIONS)
+install( DIRECTORY "opt/mulle-clang/${PROJECT_VERSION}" DESTINATION "/opt/mulle-clang"   USE_SOURCE_PERMISSIONS)
 
 #
 # create a symlink for binary
