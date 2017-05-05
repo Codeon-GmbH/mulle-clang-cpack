@@ -18,13 +18,13 @@ esac
 
 GENERATOR="${1:-${GENERATOR}}"
 
-if [ -d "build" ]
+if [ -d "package" ]
 then
-   rm -rf build || exit 1
+   rm -rf package || exit 1
 fi
 
-mkdir build || exit 1
-cd build
+mkdir package || exit 1
+cd package
 cmake ${CMAKE_FLAGS} ..
 make ${MAKE_FLAGS}
 cpack ${CPACK_FLAGS} -G "${GENERATOR}" ..

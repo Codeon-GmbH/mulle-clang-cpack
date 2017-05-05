@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 2.8)
 
-project ( cpack-mulle-clang VERSION 4.0.0.0)
+project ( cpack-mulle-clang) # VERSION 4.0.0.0)
+
+set( PROJECT_VERSION 4.0.0.0)
 
 #
 # just some libraries
