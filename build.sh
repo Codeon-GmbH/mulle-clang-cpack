@@ -37,7 +37,15 @@ build()
 {
    cd mulle-clang-lldb
    mkdir -p opt/mulle-clang/${VERSION}
-   ./install-mulle-clang.sh --prefix `pwd`/opt/mulle-clang/${VERSION} --with-lldb
+   case "${DIST}" in
+      precise)
+         CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang.sh --prefix `pwd`/opt/mulle-clang/${VERSION} --with-lldb
+      ;;
+
+      *)
+         ./install-mulle-clang.sh --prefix `pwd`/opt/mulle-clang/${VERSION} --with-lldb
+      ;;
+   esac 
    cd ..
 }
 
