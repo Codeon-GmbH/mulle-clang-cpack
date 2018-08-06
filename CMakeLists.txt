@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8)
 
 project ( cpack-mulle-clang) # VERSION 4.0.0.0)
 
-set( PROJECT_VERSION 5.0.0.2)
+set( PROJECT_VERSION 6.0.0.4)
 
 #
 # just some libraries
@@ -17,9 +17,11 @@ execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/mulle
 execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/scan-build mulle-scan-build)
 execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/llvm-nm mulle-nm)
 execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/mulle-clang mulle-clang)
+execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/lldb-mi mulle-lldb-mi)
 execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/lldb mulle-lldb)
 install( FILES ${CMAKE_BINARY_DIR}/mulle-clang DESTINATION "/usr/bin")
 install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb DESTINATION "/usr/bin")
+install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb-mi DESTINATION "/usr/bin")
 endif(CMAKE_HOST_UNIX)
 
 #
