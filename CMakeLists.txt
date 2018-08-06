@@ -13,15 +13,18 @@ install( DIRECTORY "opt/mulle-clang/${PROJECT_VERSION}" DESTINATION "/opt/mulle-
 # create a symlink for binary
 #
 if(CMAKE_HOST_UNIX)
-execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/mulle-clang-cpp mulle-clang-cpp)
-execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/scan-build mulle-scan-build)
-execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/llvm-nm mulle-nm)
-execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/mulle-clang mulle-clang)
-execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/lldb-mi mulle-lldb-mi)
-execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/lldb mulle-lldb)
-install( FILES ${CMAKE_BINARY_DIR}/mulle-clang DESTINATION "/usr/bin")
-install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb DESTINATION "/usr/bin")
-install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb-mi DESTINATION "/usr/bin")
+   message( STATUS "Create symlinks")
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/mulle-clang-cpp mulle-clang-cpp)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/scan-build mulle-scan-build)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/llvm-nm mulle-nm)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/mulle-clang mulle-clang)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/lldb mulle-lldb)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/lldb-mi mulle-lldb-mi)
+
+   message( STATUS "Install symlinks in ${CMAKE_BINARY_DIR}")
+   install( FILES ${CMAKE_BINARY_DIR}/mulle-clang DESTINATION "/usr/bin")
+   install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb DESTINATION "/usr/bin")
+   install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb-mi DESTINATION "/usr/bin")
 endif(CMAKE_HOST_UNIX)
 
 #
