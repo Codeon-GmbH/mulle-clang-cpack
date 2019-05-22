@@ -1,17 +1,8 @@
 #! /bin/sh
 
-VERSION="5.0.0.2"
+VERSION="8.0.0.0"
+BRANCH="mulle_objclang_80"
 DIST="`lsb_release -sc`"
-
-
-verify()
-{
-   if ! fgrep "${VERSION}" cpack-mulle-clang/CMakeLists.txt
-   then
-      echo "cpack-mulle-clang has the wrong version" >&2
-      exit 1
-   fi
-}
 
 
 clean()
@@ -24,12 +15,13 @@ clean()
 }
 
 
+
 download()
 {
    (
       cd mulle-clang-lldb &&
-      curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/mulle_objclang_50/install-mulle-clang.sh" &&
-      chmod 755 install-mulle-clang.sh 
+      curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${BRANCH}/bin/install-mulle-clang" &&
+      chmod 755 install-mulle-clang 
    )
 }
 
@@ -41,11 +33,11 @@ build()
       mkdir -p opt/mulle-clang/${VERSION} &&
       case "${DIST}" in
          precise)
-            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang.sh --prefix `pwd`/opt/mulle-clang/${VERSION} --with-lldb
+            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang --prefix `pwd`/opt/mulle-clang/${VERSION} --with-lldb
          ;;
 
          *)
-            ./install-mulle-clang.sh --prefix `pwd`/opt/mulle-clang/${VERSION} --with-lldb
+            ./install-mulle-clang --prefix `pwd`/opt/mulle-clang/${VERSION} --with-lldb
          ;;
       esac
    )
@@ -59,7 +51,7 @@ verpack()
    (  
       cd mulle-clang-lldb && 
       chmod 755 generate-package.sh && 
-      ./generate-package.sh 
+      VERSION="${VERSION}" ./generate-package.sh 
    )
 }
 
@@ -84,7 +76,7 @@ main()
 
 if [ $# -eq 0 ]
 then
-   main verify clean download build verpack upload
+   main clean download build verpack upload
 else
    main "$@"
 fi

@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 2.8)
 
-project ( cpack-mulle-clang) # VERSION 4.0.0.0)
+project ( cpack-mulle-clang NONE) # VERSION 4.0.0.0)
 
-set( PROJECT_VERSION 5.0.0.2)
+set( PROJECT_VERSION $ENV{ VERSION})
 
 #
 # just some libraries
