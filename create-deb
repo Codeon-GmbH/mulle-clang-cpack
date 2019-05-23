@@ -72,7 +72,7 @@ build()
    local cleanscript
 
    cleanscript="[ ! -d mulle-clang-lldb ] || rm -rf mulle-clang-lldb"
-   ssh "${user}@${vm}" "${cleanscript}" || exit 1
+   ssh -q -t "${user}@${vm}" "${cleanscript}" || exit 1
 
    local preparescript
 
@@ -80,12 +80,12 @@ build()
    [ -d cpack-mulle-clang ] || git clone \"https://www.mulle-kybernetik.com/repositories/cpack-mulle-clang\" &&
    ( cd cpack-mulle-clang && git pull )
    "
-   ssh "${user}@${vm}" "${preparescript}" || exit 1
+   ssh -q -t "${user}@${vm}" "${preparescript}" || exit 1
 
    local buildscript
 
    buildscript="VERSION=\"${version}\" ./cpack-mulle-clang/package-build"
-   ssh "${user}@${vm}" "${buildscript}" || exit 1
+   ssh -q -t "${user}@${vm}" "${buildscript}" || exit 1
 }
 
 
