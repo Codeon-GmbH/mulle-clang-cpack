@@ -56,7 +56,9 @@ verpack()
       rm -rf build && # make room for packaging
       chmod 755 generate-package &&
       VERSION="${VERSION}" ./generate-package &&
-      mv package/mulle-clang-${VERSION}-Linux.deb ../mulle-clang-${VERSION}-${DIST}-amd64.deb
+      mv package/mulle-clang-${VERSION}-Linux.deb ../mulle-clang-${VERSION}-${DIST}-amd64.deb &&
+
+      echo "Debian Package \"mulle-clang-${VERSION}-${DIST}-amd64.deb\" ready" >&2
    )
 }
 
