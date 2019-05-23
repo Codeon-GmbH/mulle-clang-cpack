@@ -1,0 +1,67 @@
+#! /usr/bin/env bash
+
+
+VM="${1:-precise}"
+VERSION="${2:-8.0.0.0}"
+
+
+# https://stackoverflow.com/questions/37453525/how-can-i-check-specific-server-running-or-notusing-virsh-commands-before-i-s
+is_vm_running()
+{
+   local vm="$1"
+
+   local tmp
+
+   tmp=$(virsh list --all | grep " vmtest " | awk '{ print $3}')
+   if [ "x$tmp" == "x" ] || [ "x$tmp" != "xrunning" ]
+   then
+      return 1
+   fi
+   return 0
+}
+
+
+start_vm_if_needed()
+{
+   local vm="$1"
+   local user="$2"
+
+   if is_vm_running "${vm}"
+   then
+      return
+   fi
+
+   virsh netstart default 2> /dev/null
+
+   if ! is_vm_running "${vm}"
+   then
+      virsh start "${vm}"
+   fi
+
+   while ! ssh "${user}@${vm}" -c true > /dev/null 2>&1
+   do
+      sleep 1
+   done
+}
+
+
+start_vm_if_needed "${VM}" "${USER}"
+
+
+cleanscript="[ ! -d mulle-clang-lldb ] || rm -rf mulle-clang-lldb"
+ssh "${user}@${vm}" -c "${cleanscript}" || exit 1
+
+
+preparescript="\
+[ -d cpack-mulle-clang ] || git clone \"mulle-kybernetik.com:/scm/public_git/repositories/cpack-mulle-clang\" &&
+( cd cpack-mulle-clang && git pull )
+"
+ssh "${user}@${vm}" -c "${preparescript}" || exit 1
+
+
+buildscript="./cpack-mulle-clang/build \"${VERSION}\""
+ssh "${user}@${vm}" -c "${buildscript}" || exit 1
+
+
+filename="mulle-clang-${VERSION}-amd64-${VM}.deb"
+scp "${user}@${vm}:${filename}" "${filename}"

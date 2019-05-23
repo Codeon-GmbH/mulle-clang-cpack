@@ -1,0 +1,77 @@
+#! /bin/sh
+
+VERSION="${1:-8.0.0.0}"
+DIST="`lsb_release -sc`"
+
+
+clean()
+{
+   if [ -d mulle-clang-lldb ]
+   then
+      rm -rf mulle-clang-lldb
+   fi
+   mkdir mulle-clang-lldb
+}
+
+
+
+download()
+{
+   (
+      cd mulle-clang-lldb &&
+      curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${VERSION}/bin/install-mulle-clang" &&
+      chmod 755 install-mulle-clang
+   )
+}
+
+
+build()
+{
+   (
+      cd mulle-clang-lldb &&
+      mkdir -p opt/mulle-clang/${VERSION} &&
+      case "${DIST}" in
+         precise)
+            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" --with-lldb
+         ;;
+
+         *)
+            ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" --with-lldb
+         ;;
+      esac
+   )
+}
+
+
+verpack()
+{
+   cp cpack-mulle-clang/* mulle-clang-lldb/ &&
+
+   (
+      cd mulle-clang-lldb &&
+      rm -rf build && # make room for packaging
+      chmod 755 generate-package &&
+      VERSION="${VERSION}" ./generate-package &&
+      mv package/mulle-clang-${VERSION}-Linux.deb ../mulle-clang-${VERSION}-amd64-${DIST}.deb
+   )
+}
+
+
+main()
+{
+   while [ $# -ne 0 ]
+   do
+      echo "====== $1 ======" >&2
+      "$1" || exit 1
+      shift
+   done
+}
+
+
+if [ $# -eq 0 ]
+then
+   main clean download build verpack
+else
+   main "$@"
+fi
+
