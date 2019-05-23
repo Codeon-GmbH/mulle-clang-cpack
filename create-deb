@@ -62,7 +62,7 @@ build_package()
    local preparescript
 
    preparescript="\
-   [ -d cpack-mulle-clang ] || git clone \"mulle-kybernetik.com:/scm/public_git/repositories/cpack-mulle-clang\" &&
+   [ -d cpack-mulle-clang ] || git clone \"https://www.mulle-kybernetik.com/repositories/cpack-mulle-clang\" &&
    ( cd cpack-mulle-clang && git pull )
    "
    ssh "${user}@${vm}" "${preparescript}" || exit 1
