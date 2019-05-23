@@ -4,6 +4,7 @@
 VM="${1:-precise}"
 VERSION="${2:-8.0.0.0}"
 
+set -x
 
 # https://stackoverflow.com/questions/37453525/how-can-i-check-specific-server-running-or-notusing-virsh-commands-before-i-s
 is_vm_running()
@@ -12,7 +13,7 @@ is_vm_running()
 
    local tmp
 
-   tmp=$(virsh list --all | grep " vmtest " | awk '{ print $3}')
+   tmp=$(virsh list --all | grep " ${vm} " | awk '{ print $3}')
    if [ "x$tmp" == "x" ] || [ "x$tmp" != "xrunning" ]
    then
       return 1
@@ -33,35 +34,50 @@ start_vm_if_needed()
 
    virsh netstart default 2> /dev/null
 
-   if ! is_vm_running "${vm}"
-   then
-      virsh start "${vm}"
-   fi
+   while ! is_vm_running "${vm}"
+   do
+      sleep 1
+      virsh start "${vm}" && break
+   done
 
-   while ! ssh "${user}@${vm}" -c true > /dev/null 2>&1
+   while ! ssh "${user}@${vm}" true > /dev/null 2>&1
    do
       sleep 1
    done
 }
 
 
+
+
+build_package()
+{
+   local vm="$1"
+   local user="$2"
+
+   local cleanscript
+
+   cleanscript="[ ! -d mulle-clang-lldb ] || rm -rf mulle-clang-lldb"
+   ssh "${user}@${vm}" "${cleanscript}" || exit 1
+
+
+   local preparescript
+
+   preparescript="\
+   [ -d cpack-mulle-clang ] || git clone \"mulle-kybernetik.com:/scm/public_git/repositories/cpack-mulle-clang\" &&
+   ( cd cpack-mulle-clang && git pull )
+   "
+   ssh "${user}@${vm}" "${preparescript}" || exit 1
+
+   local buildscript
+
+   buildscript="./cpack-mulle-clang/build \"${VERSION}\""
+   ssh "${user}@${vm}" "${buildscript}" || exit 1
+
+   local filename
+
+   filename="mulle-clang-${VERSION}-amd64-${VM}.deb"
+   scp "${user}@${vm}:${filename}" "${filename}"
+}
+
 start_vm_if_needed "${VM}" "${USER}"
-
-
-cleanscript="[ ! -d mulle-clang-lldb ] || rm -rf mulle-clang-lldb"
-ssh "${user}@${vm}" -c "${cleanscript}" || exit 1
-
-
-preparescript="\
-[ -d cpack-mulle-clang ] || git clone \"mulle-kybernetik.com:/scm/public_git/repositories/cpack-mulle-clang\" &&
-( cd cpack-mulle-clang && git pull )
-"
-ssh "${user}@${vm}" -c "${preparescript}" || exit 1
-
-
-buildscript="./cpack-mulle-clang/build \"${VERSION}\""
-ssh "${user}@${vm}" -c "${buildscript}" || exit 1
-
-
-filename="mulle-clang-${VERSION}-amd64-${VM}.deb"
-scp "${user}@${vm}:${filename}" "${filename}"
+build_package  "${VM}" "${USER}"
