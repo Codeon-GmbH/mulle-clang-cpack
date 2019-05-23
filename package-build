@@ -2,6 +2,8 @@
 
 [ "${TRACE}" = 'YES' ] && set -x && : "$0" "$@"
 
+# this script is run in the VM
+
 VERSION="${VERSION:-8.0.0.0}"
 DIST="`lsb_release -sc`"
 
@@ -54,7 +56,7 @@ verpack()
       rm -rf build && # make room for packaging
       chmod 755 generate-package &&
       VERSION="${VERSION}" ./generate-package &&
-      mv package/mulle-clang-${VERSION}-Linux.deb ../mulle-clang-${VERSION}-amd64-${DIST}.deb
+      mv package/mulle-clang-${VERSION}-Linux.deb ../mulle-clang-${VERSION}-${DIST}-amd64.deb
    )
 }
 

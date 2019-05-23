@@ -1,10 +1,25 @@
 #! /usr/bin/env bash
 
+[ "${TRACE}" = 'YES' ] && set -x && : "$0" "$@"
+
+
 # this script is run on the VM host
 
 
-VM="${1:-precise}"
-VERSION="${2:-8.0.0.0}"
+VM="precise"
+if [ $# -ne 0 ]
+then
+   VM="$1"
+   shift
+fi
+
+VERSION="8.0.0.0"
+if [ $# -ne 0 ]
+then
+   VERSION="$1"
+   shift
+fi
+
 
 
 # https://stackoverflow.com/questions/37453525/how-can-i-check-specific-server-running-or-notusing-virsh-commands-before-i-s
@@ -23,7 +38,7 @@ is_vm_running()
 }
 
 
-start_vm_if_needed()
+start()
 {
    local vm="$1"
    local user="$2"
@@ -48,16 +63,16 @@ start_vm_if_needed()
 }
 
 
-build_package()
+build()
 {
    local vm="$1"
    local user="$2"
+   local version="$3"
 
    local cleanscript
 
    cleanscript="[ ! -d mulle-clang-lldb ] || rm -rf mulle-clang-lldb"
    ssh "${user}@${vm}" "${cleanscript}" || exit 1
-
 
    local preparescript
 
@@ -69,14 +84,62 @@ build_package()
 
    local buildscript
 
-   buildscript="VERSION=\"${VERSION}\" ./cpack-mulle-clang/package-build"
+   buildscript="VERSION=\"${version}\" ./cpack-mulle-clang/package-build"
    ssh "${user}@${vm}" "${buildscript}" || exit 1
+}
+
+
+download()
+{
+   local vm="$1"
+   local user="$2"
+   local version="$3"
+
+   local dist
+
+   dist="$( ssh "${user}@${vm}" "lsb_release -sc" )" || exit 1
 
    local filename
 
-   filename="mulle-clang-${VERSION}-amd64-${VM}.deb"
+   filename="mulle-clang-${version}-${dist}-amd64.deb"
    scp "${user}@${vm}:${filename}" "${filename}"
 }
 
-start_vm_if_needed "${VM}" "${USER}"
-build_package  "${VM}" "${USER}"
+
+upload()
+{
+   local vm="$1"
+   local user="$2"
+   local version="$3"
+
+   local dist
+
+   dist="$( ssh "${user}@${vm}" "lsb_release -sc" )" || exit 1
+
+   local filename
+
+   filename="mulle-clang-${version}-${dist}-amd64.deb"
+
+   scp "${filename}" "oswald:debian-software/dists/${dist}/main/binary-amd64/"
+   # ssh oswald "cd debian-software && ./update.sh && ./upload.sh"
+}
+
+
+
+main()
+{
+   while [ $# -ne 0 ]
+   do
+      echo "////// $1 \\\\\\\\\\\\" >&2
+      "$1" "${VM}" "${USER}" "${VERSION}"  "$@" || exit 1
+      shift
+   done
+}
+
+
+if [ $# -eq 0 ]
+then
+   main start build download upload
+else
+   main "$@"
+fi
