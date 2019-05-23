@@ -69,7 +69,7 @@ build_package()
 
    local buildscript
 
-   buildscript="VERSION=\"${VERSION}\" ./cpack-mulle-clang/build"
+   buildscript="VERSION=\"${VERSION}\" ./cpack-mulle-clang/package-build"
    ssh "${user}@${vm}" "${buildscript}" || exit 1
 
    local filename
