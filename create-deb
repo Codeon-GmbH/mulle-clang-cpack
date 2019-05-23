@@ -1,10 +1,11 @@
 #! /usr/bin/env bash
 
+# this script is run on the VM host
+
 
 VM="${1:-precise}"
 VERSION="${2:-8.0.0.0}"
 
-set -x
 
 # https://stackoverflow.com/questions/37453525/how-can-i-check-specific-server-running-or-notusing-virsh-commands-before-i-s
 is_vm_running()
@@ -47,8 +48,6 @@ start_vm_if_needed()
 }
 
 
-
-
 build_package()
 {
    local vm="$1"
@@ -70,7 +69,7 @@ build_package()
 
    local buildscript
 
-   buildscript="./cpack-mulle-clang/build \"${VERSION}\""
+   buildscript="VERSION=\"${VERSION}\" ./cpack-mulle-clang/build"
    ssh "${user}@${vm}" "${buildscript}" || exit 1
 
    local filename
