@@ -49,7 +49,8 @@ verpack()
    cp cpack-mulle-clang/* mulle-clang-lldb/ &&
 
    (  
-      cd mulle-clang-lldb && 
+      cd mulle-clang-lldb &&
+      rm -rf build && # make room for packaging  
       chmod 755 generate-package.sh && 
       VERSION="${VERSION}" ./generate-package.sh 
    )
