@@ -2,7 +2,11 @@ cmake_minimum_required (VERSION 2.8)
 
 project ( cpack-mulle-clang NONE) # VERSION 4.0.0.0)
 
-set( PROJECT_VERSION $ENV{ VERSION})
+if( "$ENV{VERSION}" STREQUAL "")
+   message( FATAL_ERROR "Environment variable VERSION not set")
+endif()
+
+set( PROJECT_VERSION $ENV{VERSION})
 
 #
 # just some libraries
