@@ -29,6 +29,19 @@ download()
 }
 
 
+# just here for documentation
+# https://askubuntu.com/questions/618474/how-to-install-the-latest-gcurrently-5-1-in-ubuntucurrently-14-04
+install_gcc6_on_trusty()
+{
+   sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+   sudo apt-get update
+   sudo apt-get install gcc-6 g++-6
+   sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 100
+   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 100
+   sudo update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-6 100
+}
+
+
 build()
 {
    (
@@ -39,6 +52,7 @@ build()
             CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" --with-lldb
          ;;
 
+	      # trusty needs  g++-6
          *)
             ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" --with-lldb
          ;;
