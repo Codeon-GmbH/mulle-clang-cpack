@@ -77,14 +77,14 @@ build()
    local preparescript
 
    preparescript="\
-   [ -d cpack-mulle-clang ] || git clone \"https://www.mulle-kybernetik.com/repositories/cpack-mulle-clang\" &&
-   ( cd cpack-mulle-clang && git pull )
+   [ -d mulle-clang ] || git clone 'gitolite.mulle-kybernetik.com:mulle-clang-cpack.git' &&
+   ( cd mulle-clang-cpack && git pull )
    "
    ssh -q -t "${user}@${vm}" "${preparescript}" || exit 1
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" ./cpack-mulle-clang/package-build"
+   buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build"
    ssh -q -t "${user}@${vm}" "${buildscript}" || exit 1
 }
 
