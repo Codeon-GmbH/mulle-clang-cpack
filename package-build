@@ -19,7 +19,6 @@ clean()
 }
 
 
-
 download()
 {
    (
@@ -64,7 +63,7 @@ build()
 
 verpack()
 {
-   cp cpack-mulle-clang/* mulle-clang-lldb/ &&
+   cp mulle-clang-cpack/* mulle-clang-lldb/ &&
 
    (
       cd mulle-clang-lldb &&
