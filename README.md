@@ -28,7 +28,7 @@ VERSION=9.0.0.0 package-build
 
 ```
 sudo apt-get install git
-git clone git@gitolite.mulle-kybernetik.com:mulle-clang-cpack.git
+git clone https://github.com/Codeon-GmbH/mulle-clang-cpack.git
 ```
 
 ### Build mulle-clang into a local opt folder:

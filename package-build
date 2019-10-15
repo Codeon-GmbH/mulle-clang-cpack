@@ -4,9 +4,10 @@
 
 # this script is run in the VM
 
-VERSION="${VERSION:-8.0.0.0}"
+VERSION="${VERSION:-9.0.0.0}"
 DIST="`lsb_release -sc`"
 
+OPTIONS=--with-lldb
 
 clean()
 {
@@ -49,12 +50,12 @@ build()
       mkdir -p opt/mulle-clang/${VERSION} &&
       case "${DIST}" in
          precise)
-            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" --with-lldb
+            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" ${OPTIONS}
          ;;
 
 	      # trusty needs  g++-6
          *)
-            ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" --with-lldb
+            ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" ${OPTIONS}
          ;;
       esac
    )

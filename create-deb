@@ -13,7 +13,7 @@ then
    shift
 fi
 
-VERSION="8.0.0.0"
+VERSION="9.0.0.0"
 if [ $# -ne 0 ]
 then
    VERSION="$1"
@@ -77,7 +77,7 @@ build()
    local preparescript
 
    preparescript="\
-   [ -d mulle-clang ] || git clone 'gitolite.mulle-kybernetik.com:mulle-clang-cpack.git' &&
+   [ -d mulle-clang ] || git clone 'https://github.com/Codeon-GmbH/mulle-clang-cpack.git' &&
    ( cd mulle-clang-cpack && git pull )
    "
    ssh -q -t "${user}@${vm}" "${preparescript}" || exit 1
@@ -131,7 +131,7 @@ main()
    while [ $# -ne 0 ]
    do
       echo "////// $1 \\\\\\\\\\\\" >&2
-      "$1" "${VM}" "${USER}" "${VERSION}"  "$@" || exit 1
+      "$1" "${VM}" "${USER}" "${VERSION}" || exit 1
       shift
    done
 }
