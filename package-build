@@ -68,7 +68,7 @@ build()
 
 verpack()
 {
-   cp mulle-clang-cpack/* mulle-clang-lldb/ &&
+   cp mulle-clang-cpack/CMakeLists.txt mulle-clang-cpack/generate-package mulle-clang-lldb/ &&
 
    (
       cd mulle-clang-lldb &&
@@ -79,6 +79,12 @@ verpack()
 
       echo "Debian Package \"mulle-clang-${VERSION}-${DIST}-amd64.deb\" ready" >&2
    )
+}
+
+
+upload()
+{
+   scp mulle-clang-${VERSION}-${DIST}-amd64.deb oswald.codeon.de:debian-software/dists/${DIST}/main/binary-amd64/
 }
 
 
