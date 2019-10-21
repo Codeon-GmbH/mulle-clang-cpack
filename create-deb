@@ -2,6 +2,7 @@
 
 [ "${TRACE}" = 'YES' ] && set -x && : "$0" "$@"
 
+SSHFLAGS="${SSHFLAGS:--q -t}"
 
 # this script is run on the VM host
 
@@ -63,7 +64,7 @@ start()
 }
 
 
-build()
+clean()
 {
    local vm="$1"
    local user="$2"
@@ -73,7 +74,19 @@ build()
 
    cleanscript="[ ! -d mulle-clang-lldb ] || rm -rf mulle-clang-lldb"
 
-   ssh -q -t "${user}@${vm}" "${cleanscript}" || exit 1
+   if ! ssh ${SSHFLAGS} "${user}@${vm}" "${cleanscript}" 
+   then
+       echo "ssh failed" >&2 
+       exit 1
+   fi
+}
+
+
+prepare()
+{
+   local vm="$1"
+   local user="$2"
+   local version="$3"
 
    local preparescript
 
@@ -81,12 +94,25 @@ build()
    ( [ -d mulle-clang-cpack ] || git clone 'https://github.com/Codeon-GmbH/mulle-clang-cpack.git' ) &&
    ( cd mulle-clang-cpack && git pull )
    "
-   ssh -q -t "${user}@${vm}" "${preparescript}" || exit 1
+
+   ssh ${SSHFLAGS} "${user}@${vm}" "${preparescript}" || exit 1
+   
+   local buildscript
+
+   buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build clean download"
+}
+
+
+build()
+{
+   local vm="$1"
+   local user="$2"
+   local version="$3"
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build clean download build"
-   ssh -q -t "${user}@${vm}" "${buildscript}" || exit 1
+   buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build build"
+   ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
 
 
@@ -99,7 +125,7 @@ verpack()
    local buildscript
 
    buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build verpack"
-   ssh -q -t "${user}@${vm}" "${buildscript}"  || exit 1
+   ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}"  || exit 1
 }
 
 
@@ -111,7 +137,7 @@ download()
 
    local dist
 
-   dist="$( ssh "${user}@${vm}" "lsb_release -sc" )" || exit 1
+   dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "lsb_release -sc" )" || exit 1
 
    local filename
 
@@ -128,7 +154,7 @@ upload()
 
    local dist
 
-   dist="$( ssh "${user}@${vm}" "lsb_release -sc" )" || exit 1
+   dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "lsb_release -sc" )" || exit 1
 
    local filename
 
@@ -153,7 +179,7 @@ main()
 
 if [ $# -eq 0 ]
 then
-   main start build verpack download upload
+   main start clean prepare build verpack download upload
 else
    main "$@"
 fi
