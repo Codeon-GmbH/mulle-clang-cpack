@@ -15,7 +15,12 @@ clean()
    then
       rm -rf mulle-clang-lldb
    fi
-   mkdir mulle-clang-lldb
+
+   mkdir mulle-clang-lldb || exit 1
+
+   rm mulle-*.deb 2> /dev/null
+
+   : 
 }
 
 
