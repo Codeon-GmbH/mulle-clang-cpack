@@ -7,7 +7,7 @@
 VERSION="${VERSION:-10.0.0.0}"
 DIST="`lsb_release -sc`"
 
-OPTIONS=--with-lldb --no-compiler-rt
+OPTIONS="--with-lldb --no-compiler-rt"
 
 clean()
 {
