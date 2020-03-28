@@ -122,13 +122,25 @@ download()
    local dist
 
    dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "lsb_release -sc" )" || exit 1
+   # not sure who gives me a \r here
+   dist="`tr -d '\015' <<< "${dist}" `"
 
    local filename
+   local debname
+   local srcfilename
 
-   version="${version%-*}"
+   srcfilename="mulle-clang-${VERSION}-${dist}-amd64.deb"
+
+   debname="main"
+   case "${version}" in
+      *-*)
+         debname="${version#*-}"
+         version="${version%-*}"
+      ;;
+   esac
 
    filename="mulle-clang-${version}-${dist}-amd64.deb"
-   scp "${user}@${vm}:${filename}" "${filename}"
+   scp "${user}@${vm}:${srcfilename}" "${filename}"
 }
 
 
@@ -141,6 +153,8 @@ upload()
    local dist
 
    dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "lsb_release -sc" )" || exit 1
+   # not sure who gives me a \r here
+   dist="`tr -d '\015' <<< "${dist}" `"
 
    local filename
    local debname
@@ -154,6 +168,8 @@ upload()
    esac
 
    filename="mulle-clang-${version}-${dist}-amd64.deb"
+
+   ssh ${SSHFLAGS} "oswald" mkdir -p "debian-software/dists/${dist}/${debname}/binary-amd64" || exit 1
 
    scp "${filename}" "oswald:debian-software/dists/${dist}/${debname}/binary-amd64/"
    # ssh oswald "cd debian-software && ./update.sh && ./upload.sh"
