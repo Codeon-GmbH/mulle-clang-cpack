@@ -24,9 +24,23 @@ clean()
 
 download()
 {
+   local branch_or_tag
+
+   #
+   # grab the newest installer from the repository, even if untagged
+   #
+   case "${VERSION}" in
+      *-*)
+         branch_or_tag="${VERSION##*-}"
+      ;;
+
+      *)
+         branch_or_tag="release"
+   esac
+
    (
       cd mulle-clang-lldb &&
-      curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${VERSION}/bin/install-mulle-clang" &&
+      curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${branch_or_tag}/bin/install-mulle-clang" &&
       chmod 755 install-mulle-clang
    )
 }
@@ -101,6 +115,9 @@ main()
    done
 }
 
+
+echo "====== version ======" >&2
+echo "VERSION=${VERSION}" >&2
 
 if [ $# -eq 0 ]
 then
