@@ -1,5 +1,6 @@
 #! /bin/sh
 
+set -x
 [ "${TRACE}" = 'YES' ] && set -x && : "$0" "$@"
 
 # this script is run in the VM
@@ -16,11 +17,9 @@ clean()
       rm -rf mulle-clang-lldb
    fi
 
-   mkdir mulle-clang-lldb || exit 1
+   rm *.deb 2> /dev/null
 
-   rm mulle-*.deb 2> /dev/null
-
-   : 
+   mkdir mulle-clang-lldb 
 }
 
 
@@ -30,7 +29,7 @@ download()
       cd mulle-clang-lldb &&
       curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${VERSION}/bin/install-mulle-clang" &&
       chmod 755 install-mulle-clang
-   )
+   ) 
 }
 
 
@@ -93,7 +92,11 @@ main()
    while [ $# -ne 0 ]
    do
       echo "====== $1 ======" >&2
-      "$1" || exit 1
+      if ! "$1" 
+      then 
+         echo "$1 failed" >&2
+         exit 1
+      fi
       shift
    done
 }

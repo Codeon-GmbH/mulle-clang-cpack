@@ -7,14 +7,14 @@ SSHFLAGS="${SSHFLAGS:--q -t}"
 # this script is run on the VM host
 
 
-VM="precise"
+VM="xenial"
 if [ $# -ne 0 ]
 then
    VM="$1"
    shift
 fi
 
-VERSION="9.0.0.0"
+VERSION="10.0.0.0"
 if [ $# -ne 0 ]
 then
    VERSION="$1"
@@ -64,24 +64,6 @@ start()
 }
 
 
-clean()
-{
-   local vm="$1"
-   local user="$2"
-   local version="$3"
-
-   local cleanscript
-
-   cleanscript="[ ! -d mulle-clang-lldb ] || rm -rf mulle-clang-lldb"
-
-   if ! ssh ${SSHFLAGS} "${user}@${vm}" "${cleanscript}" 
-   then
-       echo "ssh failed" >&2 
-       exit 1
-   fi
-}
-
-
 prepare()
 {
    local vm="$1"
@@ -96,10 +78,12 @@ prepare()
    "
 
    ssh ${SSHFLAGS} "${user}@${vm}" "${preparescript}" || exit 1
-   
+
    local buildscript
 
    buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build clean download"
+
+   ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
 
 
@@ -141,6 +125,8 @@ download()
 
    local filename
 
+   version="${version%-*}"
+
    filename="mulle-clang-${version}-${dist}-amd64.deb"
    scp "${user}@${vm}:${filename}" "${filename}"
 }
@@ -157,10 +143,19 @@ upload()
    dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "lsb_release -sc" )" || exit 1
 
    local filename
+   local debname
+
+   debname="main"
+   case "${version}" in
+      *-*)
+         debname="${version#*-}"
+         version="${version%-*}"
+      ;;
+   esac
 
    filename="mulle-clang-${version}-${dist}-amd64.deb"
 
-   scp "${filename}" "oswald:debian-software/dists/${dist}/main/binary-amd64/"
+   scp "${filename}" "oswald:debian-software/dists/${dist}/${debname}/binary-amd64/"
    # ssh oswald "cd debian-software && ./update.sh && ./upload.sh"
 }
 
@@ -179,7 +174,7 @@ main()
 
 if [ $# -eq 0 ]
 then
-   main start clean prepare build verpack download upload
+   main start prepare build verpack download upload
 else
    main "$@"
 fi
