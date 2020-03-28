@@ -1,11 +1,10 @@
 #! /bin/sh
 
-set -x
 [ "${TRACE}" = 'YES' ] && set -x && : "$0" "$@"
 
 # this script is run in the VM
 
-VERSION="${VERSION:-9.0.0.0}"
+VERSION="${VERSION:-10.0.0.0}"
 DIST="`lsb_release -sc`"
 
 OPTIONS=--with-lldb
@@ -19,7 +18,7 @@ clean()
 
    rm *.deb 2> /dev/null
 
-   mkdir mulle-clang-lldb 
+   mkdir mulle-clang-lldb
 }
 
 
@@ -29,7 +28,7 @@ download()
       cd mulle-clang-lldb &&
       curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${VERSION}/bin/install-mulle-clang" &&
       chmod 755 install-mulle-clang
-   ) 
+   )
 }
 
 
@@ -50,15 +49,15 @@ build()
 {
    (
       cd mulle-clang-lldb &&
-      mkdir -p opt/mulle-clang/${VERSION} &&
+      mkdir -p "opt/mulle-clang/${VERSION}" &&
       case "${DIST}" in
          precise)
-            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" ${OPTIONS}
+            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang -v --prefix "`pwd`/opt/mulle-clang/${VERSION}" ${OPTIONS}
          ;;
 
 	      # trusty needs  g++-6
          *)
-            ./install-mulle-clang --prefix "`pwd`/opt/mulle-clang/${VERSION}" ${OPTIONS}
+            ./install-mulle-clang -v --prefix "`pwd`/opt/mulle-clang/${VERSION}" ${OPTIONS}
          ;;
       esac
    )
@@ -74,7 +73,7 @@ verpack()
       rm -rf build && # make room for packaging
       chmod 755 generate-package &&
       VERSION="${VERSION}" ./generate-package &&
-      mv package/mulle-clang-${VERSION}-Linux.deb ../mulle-clang-${VERSION}-${DIST}-amd64.deb &&
+      mv "package/mulle-clang-${VERSION}-Linux.deb" "../mulle-clang-${VERSION}-${DIST}-amd64.deb" &&
 
       echo "Debian Package \"mulle-clang-${VERSION}-${DIST}-amd64.deb\" ready" >&2
    )
@@ -83,7 +82,8 @@ verpack()
 
 upload()
 {
-   scp mulle-clang-${VERSION}-${DIST}-amd64.deb oswald.codeon.de:debian-software/dists/${DIST}/main/binary-amd64/
+   scp "mulle-clang-${VERSION}-${DIST}-amd64.deb" \
+       "oswald.codeon.de:debian-software/dists/${DIST}/main/binary-amd64/"
 }
 
 
@@ -92,8 +92,8 @@ main()
    while [ $# -ne 0 ]
    do
       echo "====== $1 ======" >&2
-      if ! "$1" 
-      then 
+      if ! "$1"
+      then
          echo "$1 failed" >&2
          exit 1
       fi
