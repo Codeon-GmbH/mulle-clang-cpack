@@ -5,25 +5,28 @@ project ( mulle-clang-cpack NONE) # VERSION 4.0.0.0)
 if( "$ENV{VERSION}" STREQUAL "")
    message( FATAL_ERROR "Environment variable VERSION not set")
 endif()
+if( "$ENV{NAME}" STREQUAL "")
+   message( FATAL_ERROR "Environment variable NAME not set")
+endif()
 
 set( PROJECT_VERSION $ENV{VERSION})
 
 #
 # just some libraries
 #
-install( DIRECTORY "opt/mulle-clang/${PROJECT_VERSION}" DESTINATION "/opt/mulle-clang" USE_SOURCE_PERMISSIONS)
+install( DIRECTORY "opt/mulle-clang/${NAME}" DESTINATION "/opt/mulle-clang" USE_SOURCE_PERMISSIONS)
 
 #
 # create a symlink for binary
 #
 if(CMAKE_HOST_UNIX)
    message( STATUS "Create symlinks")
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/mulle-clang-cpp mulle-clang-cpp)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/scan-build mulle-scan-build)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/llvm-nm mulle-nm)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/mulle-clang mulle-clang)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/lldb mulle-lldb)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${PROJECT_VERSION}/bin/lldb-mi mulle-lldb-mi)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/mulle-clang-cpp mulle-clang-cpp)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/scan-build mulle-scan-build)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/llvm-nm mulle-nm)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/mulle-clang mulle-clang)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb mulle-lldb)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb-mi mulle-lldb-mi)
 
    message( STATUS "Install symlinks in ${CMAKE_BINARY_DIR}")
    install( FILES ${CMAKE_BINARY_DIR}/mulle-clang DESTINATION "/usr/bin")

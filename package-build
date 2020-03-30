@@ -77,7 +77,7 @@ verpack()
       cd mulle-clang-lldb &&
       rm -rf build && # make room for packaging
       chmod 755 generate-package &&
-      VERSION="${VERSION}" ./generate-package &&
+      NAME="${NAME}" VERSION="${VERSION}" ./generate-package &&
       mv "package/mulle-clang-${VERSION}-Linux.deb" "../mulle-clang-${NAME}-${DIST}-amd64.deb" &&
 
       echo "Debian Package \"mulle-clang-${NAME}-${DIST}-amd64.deb\" ready" >&2
