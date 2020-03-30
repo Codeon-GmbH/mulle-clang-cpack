@@ -10,6 +10,7 @@ if( "$ENV{NAME}" STREQUAL "")
 endif()
 
 set( PROJECT_VERSION $ENV{VERSION})
+set( NAME $ENV{NAME})
 
 #
 # just some libraries

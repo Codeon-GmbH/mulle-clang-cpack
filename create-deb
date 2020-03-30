@@ -127,9 +127,6 @@ download()
 
    local filename
    local debname
-   local srcfilename
-
-   srcfilename="mulle-clang-${VERSION}-${dist}-amd64.deb"
 
    debname="main"
    case "${version}" in
@@ -139,6 +136,9 @@ download()
       ;;
    esac
 
+   local srcfilename
+
+   srcfilename="mulle-clang-${version}-${dist}-amd64.deb"
    filename="mulle-clang-${version}-${dist}-amd64.deb"
    scp "${user}@${vm}:${srcfilename}" "${filename}"
 }
