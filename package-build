@@ -5,6 +5,9 @@
 # this script is run in the VM
 
 VERSION="${VERSION:-10.0.0.0}"
+NAME="${VERSION%-*}"
+BRANCH_OR_TAG="${VERSION##*-}"
+BRANCH_OR_TAG="${BRANCH_OR_TAG:-release}"
 DIST="`lsb_release -sc`"
 
 OPTIONS="--with-lldb --no-compiler-rt"
@@ -24,23 +27,9 @@ clean()
 
 download()
 {
-   local branch_or_tag
-
-   #
-   # grab the newest installer from the repository, even if untagged
-   #
-   case "${VERSION}" in
-      *-*)
-         branch_or_tag="${VERSION##*-}"
-      ;;
-
-      *)
-         branch_or_tag="release"
-   esac
-
    (
       cd mulle-clang-lldb &&
-      curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${branch_or_tag}/bin/install-mulle-clang" &&
+      curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${BRANCH_OR_TAG}/bin/install-mulle-clang" &&
       chmod 755 install-mulle-clang
    )
 }
@@ -63,15 +52,15 @@ build()
 {
    (
       cd mulle-clang-lldb &&
-      mkdir -p "opt/mulle-clang/${VERSION}" &&
+      mkdir -p "opt/mulle-clang/${NAME}" &&
       case "${DIST}" in
          precise)
-            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang -v --prefix "`pwd`/opt/mulle-clang/${VERSION}" ${OPTIONS}
+            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang -v --prefix "`pwd`/opt/mulle-clang/${NAME}" ${OPTIONS}
          ;;
 
 	      # trusty needs  g++-6
          *)
-            ./install-mulle-clang -v --prefix "`pwd`/opt/mulle-clang/${VERSION}" ${OPTIONS}
+            ./install-mulle-clang -v --prefix "`pwd`/opt/mulle-clang/${NAME}" ${OPTIONS}
          ;;
       esac
    )
@@ -80,23 +69,25 @@ build()
 
 verpack()
 {
-   cp mulle-clang-cpack/CMakeLists.txt mulle-clang-cpack/generate-package mulle-clang-lldb/ &&
+   cp "mulle-clang-cpack/CMakeLists.txt" \
+      "mulle-clang-cpack/generate-package" \
+      "mulle-clang-lldb/" &&
 
    (
       cd mulle-clang-lldb &&
       rm -rf build && # make room for packaging
       chmod 755 generate-package &&
       VERSION="${VERSION}" ./generate-package &&
-      mv "package/mulle-clang-${VERSION}-Linux.deb" "../mulle-clang-${VERSION}-${DIST}-amd64.deb" &&
+      mv "package/mulle-clang-${VERSION}-Linux.deb" "../mulle-clang-${NAME}-${DIST}-amd64.deb" &&
 
-      echo "Debian Package \"mulle-clang-${VERSION}-${DIST}-amd64.deb\" ready" >&2
+      echo "Debian Package \"mulle-clang-${NAME}-${DIST}-amd64.deb\" ready" >&2
    )
 }
 
 
 upload()
 {
-   scp "mulle-clang-${VERSION}-${DIST}-amd64.deb" \
+   scp "mulle-clang-${NAME}-${DIST}-amd64.deb" \
        "oswald.codeon.de:debian-software/dists/${DIST}/main/binary-amd64/"
 }
 
