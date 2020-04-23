@@ -29,7 +29,9 @@ download()
 {
    (
       cd mulle-clang-lldb &&
+      echo "Downloading https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${BRANCH_OR_TAG}/bin/install-mulle-clang" >&2 &&
       curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${BRANCH_OR_TAG}/bin/install-mulle-clang" &&
+      egrep '^!#' install-mulle-clang > /dev/null &&
       chmod 755 install-mulle-clang
    )
 }
