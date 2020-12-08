@@ -3,6 +3,11 @@
 Wrap mulle-clang files in opt into an install package.
 As a bonus a symbolic link is also generated and packaged.
 
+## Prerequisites
+
+* sudo
+* git
+
 
 ## One script does all
 

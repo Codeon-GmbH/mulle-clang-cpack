@@ -34,7 +34,7 @@ download()
    (
       cd mono &&
       echo "Downloading ${url}" >&2 &&
-      curl -L "${url}" | tar xfz -
+      wget -O - "${url}" | tar xfz -
    )
 }
 
