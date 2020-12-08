@@ -21,6 +21,10 @@ then
    shift
 fi
 
+if [ ! -z $RC ]
+then
+   RC="-$RC"
+fi
 
 
 # https://stackoverflow.com/questions/37453525/how-can-i-check-specific-server-running-or-notusing-virsh-commands-before-i-s
@@ -81,7 +85,7 @@ prepare()
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build clean download"
+   buildscript="VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build clean download"
 
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
@@ -95,7 +99,7 @@ build()
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build build"
+   buildscript="VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build build"
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
 
@@ -108,7 +112,7 @@ verpack()
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" ./mulle-clang-cpack/package-build verpack"
+   buildscript="VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build verpack"
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}"  || exit 1
 }
 

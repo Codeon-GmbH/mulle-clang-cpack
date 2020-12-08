@@ -30,11 +30,12 @@ clean()
 
 download()
 {
-   url="https://github.com/Codeon-GmbH/mulle-clang-project/archive/${VERSION}.tar.gz"
+   url="https://github.com/Codeon-GmbH/mulle-clang-project/archive/${VERSION}${RC}.tar.gz"
    (
       cd mono &&
       echo "Downloading ${url}" >&2 &&
-      wget -O - "${url}" | tar xfz -
+      wget -O - "${url}" | tar xfz - &&
+      mv "mulle-clang-project-${VERSION}${RC}" "mulle-clang-project"
    )
 }
 
@@ -44,7 +45,7 @@ build()
    (
       cd mono &&
       mkdir -p "opt/mulle-clang/${VERSION}" &&
-      ./mulle-clang-project.${VERSION}/clang/bin/cmake-ninja.linux --no-sudo
+      ./mulle-clang-project/clang/bin/cmake-ninja.linux --no-sudo
    )
 }
 
