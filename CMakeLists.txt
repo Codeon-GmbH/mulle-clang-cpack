@@ -15,19 +15,19 @@ set( NAME $ENV{NAME})
 #
 # just some libraries
 #
-install( DIRECTORY "opt/mulle-clang/${NAME}" DESTINATION "/opt/mulle-clang" USE_SOURCE_PERMISSIONS)
+install( DIRECTORY "opt/mulle-clang-project/${NAME}" DESTINATION "/opt/mulle-clangproject" USE_SOURCE_PERMISSIONS)
 
 #
 # create a symlink for binary
 #
 if(CMAKE_HOST_UNIX)
    message( STATUS "Create symlinks")
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/mulle-clang-cpp mulle-clang-cpp)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/scan-build mulle-scan-build)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/llvm-nm mulle-nm)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/mulle-clang mulle-clang)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb mulle-lldb)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb-mi mulle-lldb-mi)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/clang-cpp mulle-clang-cpp)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/scan-build mulle-scan-build)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/llvm-nm mulle-nm)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/clang mulle-clang)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/lldb mulle-lldb)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/lldb-mi mulle-lldb-mi)
 
    message( STATUS "Install symlinks in ${CMAKE_BINARY_DIR}")
    install( FILES ${CMAKE_BINARY_DIR}/mulle-clang DESTINATION "/usr/bin")
@@ -48,7 +48,7 @@ set( CPACK_STRIP_FILES true)
 
 set( CPACK_PACKAGE_CONTACT "Nat! <nat@codeon.de>")
 
-set( CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/codeon-gmbh/mulle-clang")
+set( CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/codeon-gmbh/mulle-clang-project")
 set( CPACK_DEBIAN_PACKAGE_DESCRIPTION "mulle-clang, the mulle-objc compiler based on clang")
 
 set( CPACK_RPM_PACKAGE_VENDOR "Codeon GmbH")

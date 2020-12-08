@@ -9,7 +9,7 @@ As a bonus a symbolic link is also generated and packaged.
 On the VM Host (!) run
 
 ```
-create-deb "bionic" "9.0.0.0"
+create-deb "bullseye" "11.0.0.0"
 ```
 
 
@@ -18,7 +18,7 @@ create-deb "bionic" "9.0.0.0"
 On the VM guest run
 
 ```
-VERSION=9.0.0.0 package-build
+VERSION=11.0.0.0 package-build
 ```
 
 
@@ -36,49 +36,22 @@ git clone https://github.com/Codeon-GmbH/mulle-clang-cpack.git
 Set `VERSION` appropriately:
 
 ```
-VERSION="9"
-mkdir mulle-clang
-cd mulle-clang
-curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/mulle_objclang_${VERSION}0/bin/install-mulle-clang"
-
-chmod 755 install-mulle-clang
-mkdir -p opt/mulle-clang/${VERSION}.0.0.0
+VERSION="11"
+RC="" # e.g. -RC1
+mkdir mono
+cd mono
+wget -O - "https://github.com/Codeon-GmbH/mulle-clang-project/archive/${VERSION}.0.0.0${RC}.tar.gz" | tar xfz -
+mv "mulle-clang-project-${VERSION}.0.0.0${RC}" mulle-clang-project
+mkdir opt/mulle-clang-project
+sudo ln -s "$PWD/opt/mulle-clang-project" "/opt/mulle-clang-project"
 ```
 
 ####  Build normally
 
 ```
-./install-mulle-clang --prefix `pwd`/opt/mulle-clang/${VERSION}.0.0.0
+PREFIX="/opt" NAME="${VERSION}.0.0.0" ./mulle-clang-project/clang/bin/cmake-ninja.linux
 ```
 
-####  Build with Precise (it is hard)
-
-
-Get clang-3.6 unto precise otherwise it's hard. For more modern
-Ubuntus you can just use the standard compiler and substitute
-with `apt-get install build-essential`.
-
-
-```
-sudo rm -rf /var/lib/apt/lists/*
-sudo apt-get update
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-sudo apt-get update
-sudo apt-get install git
-sudo apt-get install python-software-properties
-sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-sudo echo -e "deb http://apt.llvm.org/precise/ llvm-toolchain-precise main\n" "deb-src http://apt.llvm.org/precise/ llvm-toolchain-precise main\n" >> /etc/apt/sources.list
-sudo echo -e "# 3.6\n"   "deb http://apt.llvm.org/precise/ llvm-toolchain-precise-3.6 main\n" "deb-src http://apt.llvm.org/precise/ llvm-toolchain-precise-3.6 main\n" >> /etc/apt/sources.list
-sudo wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-sudo apt-get update
-sudo apt-get install -y clang-3.6 clang++-3.6
-```
-
-Build with this instead after having done the usual Usage steps
-
-```
-CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang --prefix `pwd`/opt/mulle-clang/${VERSION}.0.0.0
-```
 
 ### Create .deb package and upload:
 

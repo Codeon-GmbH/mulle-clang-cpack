@@ -4,67 +4,47 @@
 
 # this script is run in the VM
 
-VERSION="${VERSION:-10.0.0.0}"
+VERSION="${VERSION:-11.0.0.0}"
 NAME="${VERSION%-*}"
 BRANCH_OR_TAG="${VERSION##*-}"
 BRANCH_OR_TAG="${BRANCH_OR_TAG:-release}"
 DIST="`lsb_release -sc`"
 
-OPTIONS="--with-lldb --no-compiler-rt"
 
 clean()
 {
-   if [ -d mulle-clang-lldb ]
+   if [ -d mono ]
    then
-      rm -rf mulle-clang-lldb
+      rm -rf mono
    fi
 
    rm *.deb 2> /dev/null
-
-   mkdir mulle-clang-lldb
+   mkdir mono
+   mkdir -p mono/opt/mulle-clang-project
+   if [ ! -e /opt/mulle-clang-project ]
+   then
+      sudo ln -s "$PWD/mono/opt/mulle-clang-project" "/opt/mulle-clang-project"
+   fi
 }
 
 
 download()
 {
+   url="https://github.com/Codeon-GmbH/mulle-clang-project/archive/${VERSION}.tar.gz"
    (
-      cd mulle-clang-lldb &&
-      echo "Downloading https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${BRANCH_OR_TAG}/bin/install-mulle-clang" >&2 &&
-      curl -L -O "https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang/${BRANCH_OR_TAG}/bin/install-mulle-clang" &&
-      egrep '^#!' install-mulle-clang > /dev/null &&
-      chmod 755 install-mulle-clang
+      cd mono &&
+      echo "Downloading ${url}" >&2 &&
+      curl -L "${url}" | tar xfz -
    )
-}
-
-
-# just here for documentation
-# https://askubuntu.com/questions/618474/how-to-install-the-latest-gcurrently-5-1-in-ubuntucurrently-14-04
-install_gcc6_on_trusty()
-{
-   sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-   sudo apt-get update
-   sudo apt-get install gcc-6 g++-6
-   sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 100
-   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 100
-   sudo update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-6 100
 }
 
 
 build()
 {
    (
-      cd mulle-clang-lldb &&
-      mkdir -p "opt/mulle-clang/${NAME}" &&
-      case "${DIST}" in
-         precise)
-            CC=clang-3.6 CXX=clang++-3.6 ./install-mulle-clang -v --prefix "`pwd`/opt/mulle-clang/${NAME}" ${OPTIONS}
-         ;;
-
-	      # trusty needs  g++-6
-         *)
-            ./install-mulle-clang -v --prefix "`pwd`/opt/mulle-clang/${NAME}" ${OPTIONS}
-         ;;
-      esac
+      cd mono &&
+      mkdir -p "opt/mulle-clang/${VERSION}" &&
+      ./mulle-clang-project.${VERSION}/clang/bin/cmake-ninja.linux --no-sudo
    )
 }
 
@@ -73,11 +53,10 @@ verpack()
 {
    cp "mulle-clang-cpack/CMakeLists.txt" \
       "mulle-clang-cpack/generate-package" \
-      "mulle-clang-lldb/" &&
+      "mono/" &&
 
    (
-      cd mulle-clang-lldb &&
-      rm -rf build && # make room for packaging
+      cd mono &&
       chmod 755 generate-package &&
       NAME="${NAME}" VERSION="${VERSION}" ./generate-package &&
       mv "package/mulle-clang-${VERSION}-Linux.deb" "../mulle-clang-${NAME}-${DIST}-amd64.deb" &&

@@ -7,14 +7,14 @@ SSHFLAGS="${SSHFLAGS:--q -t}"
 # this script is run on the VM host
 
 
-VM="xenial"
+VM="buster"
 if [ $# -ne 0 ]
 then
    VM="$1"
    shift
 fi
 
-VERSION="10.0.0.0"
+VERSION="11.0.0.0"
 if [ $# -ne 0 ]
 then
    VERSION="$1"
