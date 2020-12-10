@@ -14,17 +14,21 @@ then
    shift
 fi
 
-VERSION="11.0.0.0"
-if [ $# -ne 0 ]
-then
-   VERSION="$1"
-   shift
-fi
+VERSION="${VERSION:-11.0.0.0}"
 
-if [ ! -z $RC ]
-then
-   RC="-$RC"
-fi
+case "$RC" in
+   RC*)
+      RC="-$RC"
+   ;;
+
+   [0-9]*)
+      RC="-RC$RC"
+   ;;
+
+   *)
+      RC=
+   ;;
+esac
 
 
 # https://stackoverflow.com/questions/37453525/how-can-i-check-specific-server-running-or-notusing-virsh-commands-before-i-s
@@ -99,7 +103,7 @@ build()
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build build"
+   buildscript="MAKE=\"${MAKE}\" VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build build"
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
 
@@ -112,7 +116,7 @@ verpack()
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build verpack"
+   buildscript="MAKE=\"${MAKE}\" VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build verpack"
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}"  || exit 1
 }
 

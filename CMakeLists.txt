@@ -15,19 +15,19 @@ set( NAME $ENV{NAME})
 #
 # just some libraries
 #
-install( DIRECTORY "opt/mulle-clang-project/${NAME}" DESTINATION "/opt/mulle-clangproject" USE_SOURCE_PERMISSIONS)
+install( DIRECTORY "opt/mulle-clang-project/${NAME}" DESTINATION "/opt/mulle-clang" USE_SOURCE_PERMISSIONS)
 
 #
 # create a symlink for binary
 #
 if(CMAKE_HOST_UNIX)
    message( STATUS "Create symlinks")
-   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/clang-cpp mulle-clang-cpp)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/scan-build mulle-scan-build)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/llvm-nm mulle-nm)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/clang mulle-clang)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/lldb mulle-lldb)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/lldb-mi mulle-lldb-mi)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/clang-cpp mulle-clang-cpp)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/scan-build mulle-scan-build)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/llvm-nm mulle-nm)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/clang mulle-clang)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb mulle-lldb)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb-mi mulle-lldb-mi)
 
    message( STATUS "Install symlinks in ${CMAKE_BINARY_DIR}")
    install( FILES ${CMAKE_BINARY_DIR}/mulle-clang DESTINATION "/usr/bin")

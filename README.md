@@ -3,11 +3,42 @@
 Wrap mulle-clang files in opt into an install package.
 As a bonus a symbolic link is also generated and packaged.
 
+## Fresh debian memo
+
+```
+scp ~/.ssh/id_rsa_vm.pub buster:
+ssh buster
+mkdir .ssh
+mv id_rsa_vm.pub .ssh/authorized_keys
+chmod 400 .ssh/authorized_keys
+chmod 700 .ssh
+```
+
+
 ## Prerequisites
 
 * sudo
 * git
 
+On debian, install git and get sudo happen
+
+```
+su
+apt-get install git sudo
+/sbin/usermod -aG sudo <loginname> # or your login
+sudo /sbin/visudo
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) NOPASSWD: ALL
+# log off now, so sudo group change takes effect
+```
+
+Install cmake and such things:
+
+```
+wget 'https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang-project/mulle/11.0.0/clang/bin/install-prerequisites'
+chmod 755 install-prerequisites
+./install-prerequisites --no-lldb
+```
 
 ## One script does all
 
@@ -32,7 +63,7 @@ VERSION=11.0.0.0 package-build
 ### Get git happening and clone cpack-mulle-clang:
 
 ```
-sudo apt-get install git
+sudo apt-get install git sudo
 git clone https://github.com/Codeon-GmbH/mulle-clang-cpack.git
 ```
 

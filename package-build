@@ -5,6 +5,7 @@
 # this script is run in the VM
 
 VERSION="${VERSION:-11.0.0.0}"
+MAKE="${MAKE:-ninja}"
 NAME="${VERSION%-*}"
 BRANCH_OR_TAG="${VERSION##*-}"
 BRANCH_OR_TAG="${BRANCH_OR_TAG:-release}"
@@ -45,7 +46,7 @@ build()
    (
       cd mono &&
       mkdir -p "opt/mulle-clang/${VERSION}" &&
-      ./mulle-clang-project/clang/bin/cmake-ninja.linux --no-sudo
+      ./mulle-clang-project/clang/bin/cmake-${MAKE}.linux --no-sudo
    )
 }
 
