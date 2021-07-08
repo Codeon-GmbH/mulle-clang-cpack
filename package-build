@@ -4,7 +4,7 @@
 
 # this script is run in the VM
 
-VERSION="${VERSION:-11.0.0.0}"
+VERSION="${VERSION:-12.0.0.0}"
 MAKETOOL="${MAKETOOL:-ninja}"
 NAME="${VERSION%-*}"
 BRANCH_OR_TAG="${VERSION##*-}"

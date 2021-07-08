@@ -35,7 +35,7 @@ sudo /sbin/visudo
 Install cmake and such things:
 
 ```
-wget 'https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang-project/mulle/11.0.0/clang/bin/install-prerequisites'
+wget 'https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang-project/mulle/12.0.0/clang/bin/install-prerequisites'
 chmod 755 install-prerequisites
 ./install-prerequisites --no-lldb
 ```
@@ -45,7 +45,7 @@ chmod 755 install-prerequisites
 On the VM Host (!) run
 
 ```
-create-deb "bullseye" "11.0.0.0"
+create-deb "bullseye" "12.0.0.0"
 ```
 
 
@@ -54,7 +54,7 @@ create-deb "bullseye" "11.0.0.0"
 On the VM guest run
 
 ```
-VERSION=11.0.0.0 package-build
+VERSION=12.0.0.0 package-build
 ```
 
 
@@ -72,7 +72,7 @@ git clone https://github.com/Codeon-GmbH/mulle-clang-cpack.git
 Set `VERSION` appropriately:
 
 ```
-VERSION="11"
+VERSION="12"
 RC="" # e.g. -RC1
 mkdir mono
 cd mono

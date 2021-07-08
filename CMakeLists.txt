@@ -26,13 +26,13 @@ if(CMAKE_HOST_UNIX)
    execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/scan-build mulle-scan-build)
    execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/llvm-nm mulle-nm)
    execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/clang mulle-clang)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb mulle-lldb)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb-mi mulle-lldb-mi)
+#   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb mulle-lldb)
+#   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb-mi mulle-lldb-mi)
 
    message( STATUS "Install symlinks in ${CMAKE_BINARY_DIR}")
    install( FILES ${CMAKE_BINARY_DIR}/mulle-clang DESTINATION "/usr/bin")
-   install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb DESTINATION "/usr/bin")
-   install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb-mi DESTINATION "/usr/bin")
+#   install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb DESTINATION "/usr/bin")
+#   install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb-mi DESTINATION "/usr/bin")
 endif(CMAKE_HOST_UNIX)
 
 #
