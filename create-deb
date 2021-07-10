@@ -57,7 +57,7 @@ start()
       return
    fi
 
-   virsh netstart default 2> /dev/null
+   virsh net-start default 2> /dev/null
 
    while ! is_vm_running "${vm}"
    do
