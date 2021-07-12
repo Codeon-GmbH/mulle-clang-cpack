@@ -7,8 +7,6 @@
 VERSION="${VERSION:-12.0.0.0}"
 MAKETOOL="${MAKETOOL:-ninja}"
 NAME="${VERSION%-*}"
-BRANCH_OR_TAG="${VERSION##*-}"
-BRANCH_OR_TAG="${BRANCH_OR_TAG:-release}"
 DIST="`lsb_release -sc`"
 
 
@@ -45,7 +43,7 @@ build()
 {
    (
       cd mono &&
-      mkdir -p "opt/mulle-clang/${VERSION}" &&
+      mkdir -p "opt/mulle-clang/${VERSION}${RC}" &&
       ./mulle-clang-project/clang/bin/cmake-${MAKETOOL}.linux --no-sudo
    )
 }

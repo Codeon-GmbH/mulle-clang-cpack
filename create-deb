@@ -89,7 +89,7 @@ prepare()
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build clean download"
+   buildscript="VERSION=\"${version}\" RC=\"${RC}\" ./mulle-clang-cpack/package-build clean download"
 
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
