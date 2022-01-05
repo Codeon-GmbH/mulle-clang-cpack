@@ -14,7 +14,7 @@ then
    shift
 fi
 
-VERSION="${VERSION:-12.0.0.0}"
+VERSION="${VERSION:-13.0.0.0}"
 
 case "$RC" in
    RC*)
@@ -81,7 +81,7 @@ prepare()
    local preparescript
 
    preparescript="\
-   ( [ -d mulle-clang-cpack ] || git clone 'https://github.com/Codeon-GmbH/mulle-clang-cpack.git' ) &&
+   ( [ -d mulle-clang-cpack ] || git clone 'https://github.com/mulle-objc/mulle-clang-cpack.git' ) &&
    ( cd mulle-clang-cpack && git pull )
    "
 

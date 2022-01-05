@@ -37,7 +37,7 @@ sudo /sbin/visudo
 Install **cmake** and such things:
 
 ```
-wget 'https://raw.githubusercontent.com/Codeon-GmbH/mulle-clang-project/mulle/12.0.0/clang/bin/install-prerequisites'
+wget 'https://raw.githubusercontent.com/mulle-objc/mulle-clang-project/mulle/13.0.0/clang/bin/install-prerequisites'
 chmod 755 install-prerequisites
 ./install-prerequisites --no-lldb
 ```
@@ -47,7 +47,7 @@ chmod 755 install-prerequisites
 On the VM Host (!) run
 
 ```
-create-deb "bullseye" "12.0.0.0"
+create-deb "bullseye" "13.0.0.0"
 ```
 
 
@@ -56,7 +56,7 @@ create-deb "bullseye" "12.0.0.0"
 On the VM guest run
 
 ```
-VERSION=12.0.0.0 package-build
+VERSION=13.0.0.0 package-build
 ```
 
 
@@ -66,7 +66,7 @@ VERSION=12.0.0.0 package-build
 
 ```
 sudo apt-get install git sudo
-git clone https://github.com/Codeon-GmbH/mulle-clang-cpack.git
+git clone https://github.com/mulle-objc/mulle-clang-cpack.git
 ```
 
 ### Build mulle-clang into a local opt folder:
@@ -74,11 +74,11 @@ git clone https://github.com/Codeon-GmbH/mulle-clang-cpack.git
 Set `VERSION` appropriately:
 
 ```
-VERSION="12"
+VERSION="13"
 RC="" # e.g. -RC1
 mkdir mono
 cd mono
-wget -O - "https://github.com/Codeon-GmbH/mulle-clang-project/archive/${VERSION}.0.0.0${RC}.tar.gz" | tar xfz -
+wget -O - "https://github.com/mulle-objc/mulle-clang-project/archive/${VERSION}.0.0.0${RC}.tar.gz" | tar xfz -
 mv "mulle-clang-project-${VERSION}.0.0.0${RC}" mulle-clang-project
 mkdir opt/mulle-clang-project
 sudo ln -s "$PWD/opt/mulle-clang-project" "/opt/mulle-clang-project"
@@ -97,5 +97,5 @@ PREFIX="/opt" NAME="${VERSION}.0.0.0" ./mulle-clang-project/clang/bin/cmake-ninj
 cp ../cpack-mulle-clang/* .
 chmod 755 generate-package
 ./generate-package
-scp x.deb codeon@www262.your-server.de:/public_html/_site/bottles/
+# scp x.deb codeon@www262.your-server.de:/public_html/_site/bottles/
 ```

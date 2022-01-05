@@ -46,12 +46,12 @@ set( CPACK_STRIP_FILES true)
 # stuff needed for Debian
 # memo: its impossible to check for chosen generator here
 
-set( CPACK_PACKAGE_CONTACT "Nat! <nat@codeon.de>")
+set( CPACK_PACKAGE_CONTACT "Nat! <nat-cpack@mulle-kybernetik.com>")
 
-set( CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/codeon-gmbh/mulle-clang-project")
+set( CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/mulle-objc/mulle-clang-project")
 set( CPACK_DEBIAN_PACKAGE_DESCRIPTION "mulle-clang, the mulle-objc compiler based on clang")
 
-set( CPACK_RPM_PACKAGE_VENDOR "Codeon GmbH")
+set( CPACK_RPM_PACKAGE_VENDOR "Mulle kybernetiK")
 set( CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_DEBIAN_PACKAGE_DESCRIPTION}")
 
 ######
