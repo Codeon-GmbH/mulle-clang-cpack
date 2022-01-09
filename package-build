@@ -44,7 +44,7 @@ build()
    (
       cd mono &&
       mkdir -p "opt/mulle-clang/${VERSION}${RC}" &&
-      NAME="${VERSION}${RC}" ./mulle-clang-project/clang/bin/cmake-${MAKETOOL}.linux
+      NAME="${VERSION}" ./mulle-clang-project/clang/bin/cmake-${MAKETOOL}.linux
    )
 }
 
