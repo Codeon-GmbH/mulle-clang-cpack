@@ -47,7 +47,7 @@ chmod 755 install-prerequisites
 On the VM Host (!) run
 
 ```
-create-deb "bullseye" "13.0.0.0"
+create-deb "bullseye" "13.0.0.1"
 ```
 
 
@@ -56,7 +56,7 @@ create-deb "bullseye" "13.0.0.0"
 On the VM guest run
 
 ```
-VERSION=13.0.0.0 package-build
+VERSION=13.0.0.1 package-build
 ```
 
 
@@ -78,8 +78,8 @@ VERSION="13"
 RC="" # e.g. -RC1
 mkdir mono
 cd mono
-wget -O - "https://github.com/mulle-objc/mulle-clang-project/archive/${VERSION}.0.0.0${RC}.tar.gz" | tar xfz -
-mv "mulle-clang-project-${VERSION}.0.0.0${RC}" mulle-clang-project
+wget -O - "https://github.com/mulle-objc/mulle-clang-project/archive/${VERSION}.0.0.1${RC}.tar.gz" | tar xfz -
+mv "mulle-clang-project-${VERSION}.0.0.1${RC}" mulle-clang-project
 mkdir opt/mulle-clang-project
 sudo ln -s "$PWD/opt/mulle-clang-project" "/opt/mulle-clang-project"
 ```
@@ -87,7 +87,7 @@ sudo ln -s "$PWD/opt/mulle-clang-project" "/opt/mulle-clang-project"
 ####  Build normally
 
 ```
-PREFIX="/opt" NAME="${VERSION}.0.0.0" ./mulle-clang-project/clang/bin/cmake-ninja.linux
+PREFIX="/opt" NAME="${VERSION}.0.0.1" ./mulle-clang-project/clang/bin/cmake-ninja.linux
 ```
 
 
