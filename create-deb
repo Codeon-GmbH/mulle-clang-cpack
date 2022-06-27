@@ -104,7 +104,10 @@ build()
 
    local buildscript
 
-   buildscript="MAKETOOL=\"${MAKETOOL}\" VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build build"
+   buildscript="MAKETOOL=\"${MAKETOOL}\" \
+VERSION=\"${version}\" \
+RC="${RC}" \
+./mulle-clang-cpack/package-build build"
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
 
@@ -117,7 +120,10 @@ verpack()
 
    local buildscript
 
-   buildscript="MAKETOOL=\"${MAKETOOL}\" VERSION=\"${version}\" RC="${RC}" ./mulle-clang-cpack/package-build verpack"
+   buildscript="MAKETOOL=\"${MAKETOOL}\" \
+VERSION=\"${version}\" \
+RC="${RC}" \
+./mulle-clang-cpack/package-build verpack"
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}"  || exit 1
 }
 
