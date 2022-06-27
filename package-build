@@ -8,6 +8,8 @@ VERSION="${VERSION:-14.0.6.0}"
 MAKETOOL="${MAKETOOL:-ninja}"
 NAME="${VERSION%-*}"
 DIST="`lsb_release -sc`"
+CC="${CC:-clang}"
+CXX="${CXX:-clang++}"
 
 
 clean()
@@ -44,7 +46,10 @@ build()
    (
       cd mono &&
       mkdir -p "opt/mulle-clang/${VERSION}${RC}" &&
-      NAME="${VERSION}" ./mulle-clang-project/clang/bin/cmake-${MAKETOOL}.linux
+      NAME="${VERSION}" \
+      CC="${CC}" \
+      CXX="${CXX}" \
+         ./mulle-clang-project/clang/bin/cmake-${MAKETOOL}.linux
    )
 }
 
@@ -99,6 +104,7 @@ if [ -z "`command -v "${CC:-clang}" `" ]
 then
    unset CC
 fi
+
 if [ -z "`command -v "${CXX:-clang++}" `" ]
 then
    unset CXX
