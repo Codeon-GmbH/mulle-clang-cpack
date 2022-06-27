@@ -37,7 +37,7 @@ sudo /sbin/visudo
 Install **cmake** and such things:
 
 ```
-wget 'https://raw.githubusercontent.com/mulle-objc/mulle-clang-project/mulle/13.0.0/clang/bin/install-prerequisites'
+wget 'https://raw.githubusercontent.com/mulle-objc/mulle-clang-project/mulle/14.0.6/clang/bin/install-prerequisites'
 chmod 755 install-prerequisites
 ./install-prerequisites --no-lldb
 ```
@@ -47,7 +47,7 @@ chmod 755 install-prerequisites
 On the VM Host (!) run
 
 ```
-create-deb "bullseye" "13.0.0.1"
+create-deb "bullseye" "14.0.6.0"
 ```
 
 
@@ -56,7 +56,7 @@ create-deb "bullseye" "13.0.0.1"
 On the VM guest run
 
 ```
-VERSION=13.0.0.1 package-build
+VERSION=14.0.6.0 package-build
 ```
 
 

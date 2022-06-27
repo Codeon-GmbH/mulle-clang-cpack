@@ -14,7 +14,7 @@ then
    shift
 fi
 
-VERSION="${VERSION:-13.0.0.1}"
+VERSION="${VERSION:-14.0.6.0}"
 
 case "$RC" in
    RC*)
@@ -82,7 +82,8 @@ prepare()
 
    preparescript="\
    ( [ -d mulle-clang-cpack ] || git clone 'https://github.com/mulle-objc/mulle-clang-cpack.git' ) &&
-   ( cd mulle-clang-cpack && git pull )
+   ( cd mulle-clang-cpack && git pull ) &&
+   git checkout mulle/14.0.6
    "
 
    ssh ${SSHFLAGS} "${user}@${vm}" "${preparescript}" || exit 1
