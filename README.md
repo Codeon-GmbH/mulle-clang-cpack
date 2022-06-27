@@ -47,7 +47,7 @@ chmod 755 install-prerequisites
 On the VM Host (!) run
 
 ```
-create-deb "bullseye" "14.0.6.0"
+VERSION=14.0.6.0 RC=1 ./create-deb "bullseye"
 ```
 
 

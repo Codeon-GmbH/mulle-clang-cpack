@@ -94,6 +94,16 @@ main()
 echo "====== version ======" >&2
 echo "VERSION=${VERSION}" >&2
 
+# prefer clang (or whats passed in), but fallback to system default
+if [ -z "`command -v "${CC:-clang}" `" ]
+then
+   unset CC
+fi
+if [ -z "`command -v "${CXX:-clang++}" `" ]
+then
+   unset CXX
+fi
+
 if [ $# -eq 0 ]
 then
    main clean download build verpack

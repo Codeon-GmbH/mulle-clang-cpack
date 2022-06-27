@@ -83,7 +83,7 @@ prepare()
    preparescript="\
    ( [ -d mulle-clang-cpack ] || git clone 'https://github.com/mulle-objc/mulle-clang-cpack.git' ) &&
    ( cd mulle-clang-cpack && git pull ) &&
-   git checkout mulle/14.0.6
+   ( cd mulle-clang-cpack && git checkout mulle/${version%\.*} )
    "
 
    ssh ${SSHFLAGS} "${user}@${vm}" "${preparescript}" || exit 1
