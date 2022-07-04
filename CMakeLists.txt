@@ -5,32 +5,34 @@ project ( mulle-clang-cpack NONE) # VERSION 4.0.0.0)
 if( "$ENV{VERSION}" STREQUAL "")
    message( FATAL_ERROR "Environment variable VERSION not set")
 endif()
-if( "$ENV{NAME}" STREQUAL "")
-   message( FATAL_ERROR "Environment variable NAME not set")
-endif()
 
 set( PROJECT_VERSION $ENV{VERSION})
-set( NAME $ENV{NAME})
+set( VERSION $ENV{VERSION})
+set( RC $ENV{RC})
+
+set( NAME "${VERSION}${RC}")
 
 #
 # just some libraries
 #
-install( DIRECTORY "opt/mulle-clang-project/${NAME}" DESTINATION "/opt/mulle-clang" USE_SOURCE_PERMISSIONS)
+install( DIRECTORY "opt/mulle-clang-project/${NAME}" DESTINATION "/opt/mulle-clang-project" USE_SOURCE_PERMISSIONS)
 
 #
 # create a symlink for binary
 #
 if(CMAKE_HOST_UNIX)
-   message( STATUS "Create symlinks")
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/clang-cpp mulle-clang-cpp)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/scan-build mulle-scan-build)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/llvm-nm mulle-nm)
-   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/clang mulle-clang)
+#   message( STATUS "Create symlinks")
+#   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/clang-cpp mulle-clang-cpp)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/mulle-scan-build mulle-scan-build)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/mulle-llvm-nm mulle-nm)
+   execute_process(COMMAND ln -s ../../opt/mulle-clang-project/${NAME}/bin/mulle-clang mulle-clang)
 #   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb mulle-lldb)
 #   execute_process(COMMAND ln -s ../../opt/mulle-clang/${NAME}/bin/lldb-mi mulle-lldb-mi)
 
    message( STATUS "Install symlinks in ${CMAKE_BINARY_DIR}")
    install( FILES ${CMAKE_BINARY_DIR}/mulle-clang DESTINATION "/usr/bin")
+   install( FILES ${CMAKE_BINARY_DIR}/mulle-scan-build DESTINATION "/usr/bin")
+   install( FILES ${CMAKE_BINARY_DIR}/mulle-nm DESTINATION "/usr/bin")
 #   install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb DESTINATION "/usr/bin")
 #   install( FILES ${CMAKE_BINARY_DIR}/mulle-lldb-mi DESTINATION "/usr/bin")
 endif(CMAKE_HOST_UNIX)
@@ -40,7 +42,7 @@ endif(CMAKE_HOST_UNIX)
 #
 ######
 set( CPACK_PACKAGE_NAME "mulle-clang")
-set( CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set( CPACK_PACKAGE_VERSION "${NAME}")
 set( CPACK_STRIP_FILES true)
 
 # stuff needed for Debian

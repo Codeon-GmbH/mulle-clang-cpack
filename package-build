@@ -65,7 +65,7 @@ verpack()
       cd mono &&
       chmod 755 generate-package &&
       VERSION="${VERSION}" ./generate-package &&
-      mv "package/mulle-clang-${VERSION}-Linux.deb" "../mulle-clang-${VERSION}${RC}-${DIST}-amd64.deb" &&
+      mv "package/mulle-clang-${VERSION}${RC}-Linux.deb" "../mulle-clang-${VERSION}${RC}-${DIST}-amd64.deb" &&
 
       echo "Debian Package \"mulle-clang-${VERSION}${RC}-${DIST}-amd64.deb\" ready" >&2
    )
@@ -77,7 +77,7 @@ verpack()
 #
 upload()
 {
-   scp "mulle-clang-${VERSION}-${DIST}-amd64.deb" \
+   scp "mulle-clang-${VERSION}${RC}-${DIST}-amd64.deb" \
        "oswald.codeon.de:debian-software/dists/${DIST}/main/binary-amd64/"
 }
 
@@ -99,6 +99,7 @@ main()
 
 echo "====== version ======" >&2
 echo "VERSION=${VERSION}" >&2
+echo "RC=${RC}" >&2
 
 # prefer clang (or whats passed in), but fallback to system default
 if [ -z "`command -v "${CC:-clang}" `" ]

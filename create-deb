@@ -77,6 +77,7 @@ prepare()
    local vm="$1"
    local user="$2"
    local version="$3"
+   local rc="$4"
 
    local preparescript
 
@@ -90,7 +91,7 @@ prepare()
 
    local buildscript
 
-   buildscript="VERSION=\"${version}\" RC=\"${RC}\" ./mulle-clang-cpack/package-build clean download"
+   buildscript="VERSION=\"${version}\" RC=\"${rc}\" ./mulle-clang-cpack/package-build clean download"
 
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
@@ -101,12 +102,13 @@ build()
    local vm="$1"
    local user="$2"
    local version="$3"
+   local rc="$4"
 
    local buildscript
 
    buildscript="MAKETOOL=\"${MAKETOOL}\" \
 VERSION=\"${version}\" \
-RC="${RC}" \
+RC="${rc}" \
 ./mulle-clang-cpack/package-build build"
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}" || exit 1
 }
@@ -117,12 +119,13 @@ verpack()
    local vm="$1"
    local user="$2"
    local version="$3"
+   local rc="$4"
 
    local buildscript
 
    buildscript="MAKETOOL=\"${MAKETOOL}\" \
 VERSION=\"${version}\" \
-RC="${RC}" \
+RC="${rc}" \
 ./mulle-clang-cpack/package-build verpack"
    ssh ${SSHFLAGS} "${user}@${vm}" "${buildscript}"  || exit 1
 }
@@ -133,6 +136,7 @@ download()
    local vm="$1"
    local user="$2"
    local version="$3"
+   local rc="$4"
 
    local dist
 
@@ -153,8 +157,8 @@ download()
 
    local srcfilename
 
-   srcfilename="mulle-clang-${version}-${dist}-amd64.deb"
-   filename="mulle-clang-${version}-${dist}-amd64.deb"
+   srcfilename="mulle-clang-${version}${rc}-${dist}-amd64.deb"
+   filename="mulle-clang-${version}${rc}-${dist}-amd64.deb"
    scp "${user}@${vm}:${srcfilename}" "${filename}"
 }
 
@@ -164,6 +168,7 @@ upload()
    local vm="$1"
    local user="$2"
    local version="$3"
+   local rc="$4"
 
    local dist
 
@@ -182,7 +187,7 @@ upload()
       ;;
    esac
 
-   filename="mulle-clang-${version}-${dist}-amd64.deb"
+   filename="mulle-clang-${version}${rc}-${dist}-amd64.deb"
 
    ssh ${SSHFLAGS} "oswald" mkdir -p "debian-software/dists/${dist}/${debname}/binary-amd64" || exit 1
 
@@ -197,7 +202,7 @@ main()
    while [ $# -ne 0 ]
    do
       echo "////// $1 \\\\\\\\\\\\" >&2
-      "$1" "${VM}" "${USER}" "${VERSION}" || exit 1
+      "$1" "${VM}" "${USER}" "${VERSION}" "${RC}" || exit 1
       shift
    done
 }
