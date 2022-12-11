@@ -47,7 +47,7 @@ chmod 755 install-prerequisites
 On the VM Host (!) run
 
 ```
-VERSION=14.0.6.1 RC=1 ./create-deb "bullseye"
+VERSION=14.0.6.2 RC= ./create-deb "bullseye"
 ```
 
 
@@ -56,7 +56,7 @@ VERSION=14.0.6.1 RC=1 ./create-deb "bullseye"
 On the VM guest run
 
 ```
-VERSION=14.0.6.1 package-build
+VERSION=14.0.6.2 package-build
 ```
 
 
@@ -74,12 +74,12 @@ git clone https://github.com/mulle-objc/mulle-clang-cpack.git
 Set `VERSION` appropriately:
 
 ```
-VERSION="13"
+VERSION="14.0.6.2"
 RC="" # e.g. -RC1
 mkdir mono
 cd mono
-wget -O - "https://github.com/mulle-objc/mulle-clang-project/archive/${VERSION}.0.0.1${RC}.tar.gz" | tar xfz -
-mv "mulle-clang-project-${VERSION}.0.0.1${RC}" mulle-clang-project
+wget -O - "https://github.com/mulle-objc/mulle-clang-project/archive/${VERSION}${RC}.tar.gz" | tar xfz -
+mv "mulle-clang-project-${VERSION}${RC}" mulle-clang-project
 mkdir opt/mulle-clang-project
 sudo ln -s "$PWD/opt/mulle-clang-project" "/opt/mulle-clang-project"
 ```
@@ -87,7 +87,7 @@ sudo ln -s "$PWD/opt/mulle-clang-project" "/opt/mulle-clang-project"
 ####  Build normally
 
 ```
-PREFIX="/opt" NAME="${VERSION}.0.0.1" ./mulle-clang-project/clang/bin/cmake-ninja.linux
+PREFIX="/opt" NAME="${VERSION}" ./mulle-clang-project/clang/bin/cmake-ninja.linux
 ```
 
 
@@ -97,5 +97,4 @@ PREFIX="/opt" NAME="${VERSION}.0.0.1" ./mulle-clang-project/clang/bin/cmake-ninj
 cp ../cpack-mulle-clang/* .
 chmod 755 generate-package
 ./generate-package
-# scp x.deb codeon@www262.your-server.de:/public_html/_site/bottles/
 ```

@@ -4,7 +4,7 @@
 
 # this script is run in the VM
 
-VERSION="${VERSION:-14.0.6.1}"
+VERSION="${VERSION:-14.0.6.2}"
 RC="${RC}"
 MAKETOOL="${MAKETOOL:-ninja}"
 DIST="`lsb_release -sc`"
