@@ -7,7 +7,7 @@
 VERSION="${VERSION:-14.0.6.2}"
 RC="${RC}"
 MAKETOOL="${MAKETOOL:-ninja}"
-DIST="`lsb_release -sc`"
+DIST="`lsb_release -sc 2> /dev/null`"
 CC="${CC:-clang}"
 CXX="${CXX:-clang++}"
 

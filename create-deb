@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#! /usr/bin/env mulle-bash
 
 [ "${TRACE}" = 'YES' ] && set -x && : "$0" "$@"
 
