@@ -50,7 +50,7 @@ set( CPACK_STRIP_FILES true)
 
 set( CPACK_PACKAGE_CONTACT "Nat! <nat-cpack@mulle-kybernetik.com>")
 
-set( CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/mulle-objc/mulle-clang-project")
+set( CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/mulle-cc/mulle-clang-project")
 set( CPACK_DEBIAN_PACKAGE_DESCRIPTION "mulle-clang, the mulle-objc compiler based on clang")
 
 set( CPACK_RPM_PACKAGE_VENDOR "Mulle kybernetiK")

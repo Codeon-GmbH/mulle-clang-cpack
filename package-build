@@ -4,7 +4,7 @@
 
 # this script is run in the VM
 
-VERSION="${VERSION:-14.0.6.2}"
+VERSION="${VERSION:-17.0.6.0}"
 RC="${RC}"
 MAKETOOL="${MAKETOOL:-ninja}"
 DIST="`lsb_release -sc 2> /dev/null`"
@@ -22,16 +22,16 @@ clean()
    rm *.deb 2> /dev/null
    mkdir mono
    mkdir -p mono/opt/mulle-clang-project
-   if [ ! -e /opt/mulle-clang-project ]
-   then
-      sudo ln -s "$PWD/mono/opt/mulle-clang-project" "/opt/mulle-clang-project"
-   fi
+#   if [ ! -e /opt/mulle-clang-project ]
+#   then
+#      sudo ln -s "$PWD/mono/opt/mulle-clang-project" "/opt/mulle-clang-project"
+#   fi
 }
 
 
 download()
 {
-   url="https://github.com/mulle-objc/mulle-clang-project/archive/${VERSION}${RC}.tar.gz"
+   url="https://github.com/mulle-cc/mulle-clang-project/archive/${VERSION}${RC}.tar.gz"
    (
       cd mono &&
       echo "Downloading ${url}" >&2 &&

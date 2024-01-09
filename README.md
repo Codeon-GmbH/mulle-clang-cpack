@@ -1,6 +1,10 @@
-# Creating a mulle-clang redistributable from binaries using CPack
+# CreatE a mulle-clang redistributable from binaries using CPack
 
-Wrap mulle-clang files in opt into an install package.
+These scripts eraps mulle-clang files in `/opt` into an install package.
+The creation of said files was done by previous step not covered by this
+project (most likely by a `cmake-ninja.<platform>` script found in
+[mulle-clang-project/clang/bin](https://github.com/mulle-cc/mulle-clang-project/tree/mulle/14.0.6/clang/bin)))
+
 As a bonus a symbolic link is also generated and packaged.
 
 ## Create a fresh debian VM (if needed)
@@ -19,8 +23,6 @@ chmod 700 .ssh
 
 Add `buster` to `/etc/hosts` on host.
 Add `buster` to `~/.ssh/config` on host.
-
-
 
 
 ## Prerequisites
@@ -43,7 +45,7 @@ sudo /sbin/visudo
 Install **cmake** and such things:
 
 ``` bash
-wget 'https://raw.githubusercontent.com/mulle-objc/mulle-clang-project/mulle/14.0.6/clang/bin/install-prerequisites'
+wget 'https://raw.githubusercontent.com/mulle-cc/mulle-clang-project/mulle/14.0.6/clang/bin/install-prerequisites'
 chmod 755 install-prerequisites
 ./install-prerequisites --no-lldb
 ```
@@ -53,7 +55,7 @@ chmod 755 install-prerequisites
 On the VM Host (!) run
 
 ``` bash
-VERSION=14.0.6.2 RC= ./create-deb "bullseye"
+VERSION=17.0.6.0 RC= ./create-deb "bullseye"
 ```
 
 
@@ -62,7 +64,7 @@ VERSION=14.0.6.2 RC= ./create-deb "bullseye"
 On the VM guest run
 
 ``` bash
-VERSION=14.0.6.2 package-build
+VERSION=17.0.6.0 package-build
 ```
 
 
@@ -74,7 +76,7 @@ VERSION=14.0.6.2 package-build
 
 ``` bash
 sudo apt-get install git sudo
-git clone https://github.com/mulle-objc/mulle-clang-cpack.git
+git clone https://github.com/mulle-cc/mulle-clang-cpack.git
 ```
 
 #### Build mulle-clang into a local opt folder:
@@ -82,11 +84,11 @@ git clone https://github.com/mulle-objc/mulle-clang-cpack.git
 Set `VERSION` appropriately:
 
 ``` bash
-VERSION="14.0.6.2"
+VERSION="17.0.6.0"
 RC="" # e.g. -RC1
 mkdir mono
 cd mono
-wget -O - "https://github.com/mulle-objc/mulle-clang-project/archive/${VERSION}${RC}.tar.gz" | tar xfz -
+wget -O - "https://github.com/mulle-cc/mulle-clang-project/archive/${VERSION}${RC}.tar.gz" | tar xfz -
 mv "mulle-clang-project-${VERSION}${RC}" mulle-clang-project
 mkdir opt/mulle-clang-project
 sudo ln -s "$PWD/opt/mulle-clang-project" "/opt/mulle-clang-project"
