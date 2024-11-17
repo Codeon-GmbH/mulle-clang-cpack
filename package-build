@@ -4,10 +4,22 @@
 
 # this script is run in the VM
 
-VERSION="${VERSION:-17.0.6.0}"
+get_dist()
+{
+   if [ -f /etc/os-release ]
+   then
+      ( . /etc/os-release && echo $VERSION_CODENAME )
+      return
+   fi
+
+   lsb_release -sc 2> /dev/null | tail -1
+}
+
+
+VERSION="${VERSION:-17.0.6.2}"
 RC="${RC}"
 MAKETOOL="${MAKETOOL:-ninja}"
-DIST="`lsb_release -sc 2> /dev/null`"
+DIST="`get_dist`"
 CC="${CC:-clang}"
 CXX="${CXX:-clang++}"
 

@@ -6,29 +6,22 @@ SSHFLAGS="${SSHFLAGS:--q -t}"
 
 # this script is run on the VM host
 
+is_function()
+{
+   [ "`type -t "$1"`" = "function" ]
+}
 
-VM="buster"
-if [ $# -ne 0 ]
-then
-   VM="$1"
-   shift
-fi
 
-VERSION="${VERSION:-17.0.6.0}"
+get_dist()
+{
+   if [ -f /etc/os-release ]
+   then
+      ( . /etc/os-release && echo $VERSION_CODENAME )
+      return
+   fi
 
-case "$RC" in
-   RC*)
-      RC="-$RC"
-   ;;
-
-   [0-9]*)
-      RC="-RC$RC"
-   ;;
-
-   *)
-      RC=
-   ;;
-esac
+   lsb_release -sc 2> /dev/null | tail -1
+}
 
 
 # https://stackoverflow.com/questions/37453525/how-can-i-check-specific-server-running-or-notusing-virsh-commands-before-i-s
@@ -140,7 +133,7 @@ download()
 
    local dist
 
-   dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "lsb_release -sc" )" || exit 1
+   dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "`get_dist`" )" || exit 1
    # not sure who gives me a \r here
    dist="`tr -d '\015' <<< "${dist}" `"
 
@@ -172,7 +165,7 @@ upload()
 
    local dist
 
-   dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "lsb_release -sc" )" || exit 1
+   dist="$( ssh ${SSHFLAGS} "${user}@${vm}" "`get_dist`" )" || exit 1
    # not sure who gives me a \r here
    dist="`tr -d '\015' <<< "${dist}" `"
 
@@ -206,6 +199,32 @@ main()
       shift
    done
 }
+
+set -x
+
+VM="bullseye"
+if [ $# -ne 0 ] && ! is_function "$1"
+then
+   VM="$1"
+   shift
+fi
+
+VERSION="${VERSION:-17.0.6.2}"
+
+case "$RC" in
+   RC*)
+      RC="-$RC"
+   ;;
+
+   [0-9]*)
+      RC="-RC$RC"
+   ;;
+
+   *)
+      RC=
+   ;;
+esac
+
 
 
 if [ $# -eq 0 ]
